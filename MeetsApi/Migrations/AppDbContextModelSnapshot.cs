@@ -22,6 +22,21 @@ namespace MeetsApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("MeetsApi.Data.Models.Attendee", b =>
+                {
+                    b.Property<int>("MemberId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MemberId", "MeetingId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("Attendees");
+                });
+
             modelBuilder.Entity("MeetsApi.Data.Models.Meeting", b =>
                 {
                     b.Property<int>("Id")
@@ -78,15 +93,39 @@ namespace MeetsApi.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("MeetsApi.Data.Models.Attendee", b =>
+                {
+                    b.HasOne("MeetsApi.Data.Models.Meeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeetsApi.Data.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("MeetsApi.Data.Models.Meeting", b =>
                 {
                     b.HasOne("MeetsApi.Data.Models.Member", "Creator")
-                        .WithMany()
+                        .WithMany("Meetings")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("MeetsApi.Data.Models.Member", b =>
+                {
+                    b.Navigation("Meetings");
                 });
 #pragma warning restore 612, 618
         }

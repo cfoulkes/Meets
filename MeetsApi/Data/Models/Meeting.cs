@@ -12,4 +12,8 @@ public class Meeting
     public int CreatorId { get; set; }
     public Member Creator { get; set; } = null!;
 
+    
+    public virtual List<Member> Attendees { get; set; }
+
+
 }

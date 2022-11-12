@@ -50,6 +50,35 @@ namespace MeetsApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attendees",
+                columns: table => new
+                {
+                    MemberId = table.Column<int>(type: "integer", nullable: false),
+                    MeetingId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendees", x => new { x.MemberId, x.MeetingId });
+                    table.ForeignKey(
+                        name: "FK_Attendees_Meetings_MeetingId",
+                        column: x => x.MeetingId,
+                        principalTable: "Meetings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendees_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendees_MeetingId",
+                table: "Attendees",
+                column: "MeetingId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Meetings_CreatorId",
                 table: "Meetings",
@@ -59,6 +88,9 @@ namespace MeetsApi.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Attendees");
+
             migrationBuilder.DropTable(
                 name: "Meetings");
 
