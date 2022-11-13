@@ -9,13 +9,12 @@ public class AppDbContext : DbContext
     {
     }
     
-    public DbSet<Meeting> Meetings { get; set; }
-    public DbSet<Member> Members { get; set; }
-    public DbSet<Attendee> Attendees { get; set; }
-    public DbSet<Invitation> Invitations { get; set; }
-    public DbSet<InvitationStatus> InvitationStatuses { get; set; }
-    public DbSet<MeetingType> MeetingTypes { get; set; }
-    
+    public DbSet<Member> Members => Set<Member>();
+    public DbSet<Meeting> Meetings => Set<Meeting>();
+    public DbSet<Attendee> Attendees => Set<Attendee>();
+    public DbSet<Invitation> Invitationa => Set<Invitation>();
+    public DbSet<InvitationStatus> InvitationStatuss => Set<InvitationStatus>();
+    public DbSet<MeetingType> MeetingTypes => Set<MeetingType>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
