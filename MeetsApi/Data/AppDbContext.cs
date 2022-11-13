@@ -12,6 +12,10 @@ public class AppDbContext : DbContext
     public DbSet<Meeting> Meetings { get; set; }
     public DbSet<Member> Members { get; set; }
     public DbSet<Attendee> Attendees { get; set; }
+    public DbSet<Invitation> Invitations { get; set; }
+    public DbSet<InvitationStatus> InvitationStatuses { get; set; }
+    public DbSet<MeetingType> MeetingTypes { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

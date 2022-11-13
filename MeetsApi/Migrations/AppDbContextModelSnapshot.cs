@@ -37,6 +37,51 @@ namespace MeetsApi.Migrations
                     b.ToTable("Attendees");
                 });
 
+            modelBuilder.Entity("MeetsApi.Data.Models.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Invitations");
+                });
+
+            modelBuilder.Entity("MeetsApi.Data.Models.InvitationStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InvitationStatuses");
+                });
+
             modelBuilder.Entity("MeetsApi.Data.Models.Meeting", b =>
                 {
                     b.Property<int>("Id")
@@ -58,14 +103,33 @@ namespace MeetsApi.Migrations
                     b.Property<DateTime>("ScheduledAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("TypeId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("MeetsApi.Data.Models.MeetingType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeetingTypes");
                 });
 
             modelBuilder.Entity("MeetsApi.Data.Models.Member", b =>
@@ -112,6 +176,33 @@ namespace MeetsApi.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("MeetsApi.Data.Models.Invitation", b =>
+                {
+                    b.HasOne("MeetsApi.Data.Models.Meeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeetsApi.Data.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeetsApi.Data.Models.InvitationStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("MeetsApi.Data.Models.Meeting", b =>
                 {
                     b.HasOne("MeetsApi.Data.Models.Member", "Creator")
@@ -120,7 +211,15 @@ namespace MeetsApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MeetsApi.Data.Models.MeetingType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Creator");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("MeetsApi.Data.Models.Member", b =>

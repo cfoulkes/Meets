@@ -6,14 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeetsApi.Data.Models
+namespace MeetsApi.Data.Models;
+public class Attendee
 {
-    public class Attendee
-    {
-        public int MemberId { get; set; }
-        public int MeetingId { get; set; }
-        public virtual Member Member { get; set; } = null!;
-        public virtual Meeting Meeting { get; set; } = null!;
+    public int MemberId { get; set; }
+    public int MeetingId { get; set; }
+    public virtual Member Member { get; set; } = null!;
+    public virtual Meeting Meeting { get; set; } = null!;
 
-    }
 }
